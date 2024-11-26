@@ -85,8 +85,8 @@ const homePageSlice = createSlice({
 export default homePageSlice.reducer;
 
 // Selectors
-// export const selectParks = (state: RootState) => state.homePage.parks;
-// export const selectLocations = (state: RootState) => state.homePage.locations;
-// export const selectReviews = (state: RootState) => state.homePage.reviews;
-// export const selectHomePageStatus = (state: RootState) =>
-//   state.homePage.status;
+export const selectParks = (state: RootState) => state.homePage.parks;
+export const selectLocations = (state: RootState) => state.homePage.locations;
+export const selectReviews = (state: RootState) => state.homePage.reviews;
+export const selectHomePageStatus = (state: RootState) =>
+  state.homePage.status;
