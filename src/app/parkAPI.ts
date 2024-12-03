@@ -1,12 +1,7 @@
-import axios from 'axios';
+import { createApiClient } from '../config/apiClient';
 import { ReviewRequest } from '../models/dtos';
 
-const apiClient = axios.create({
-  baseURL: 'http://localhost:5130/api/Park',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const apiClient = createApiClient('Park');
 
 // Fetch all parks
 export const getParks = async () => {
