@@ -73,7 +73,7 @@ const SignIn: React.FC = () => {
           width="100%"
           gap="10%"
         >
-          <Box width="25vw" height="20vh">
+          <Box width="fit-content" height="20vh">
             <Typography sx={{ fontSize: "6rem" }} gutterBottom align="center">
               Set Anonymous Username
             </Typography>
@@ -83,7 +83,19 @@ const SignIn: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               fullWidth
-              sx={{ marginBottom: 2 }}
+              sx={{
+                marginBottom: "1rem", // Adjust spacing between fields
+                "& .MuiInputLabel-root": {
+                  fontSize: "2rem", // Set label font size
+                },
+                "& .MuiInputBase-input": {
+                  fontSize: "5rem", // Set input font size
+                },
+                "& .MuiInputBase-input::placeholder": {
+                  fontSize: "5rem", // Set placeholder text size
+                },
+              }}
+              hiddenLabel
             />
 
             <Button
@@ -91,6 +103,10 @@ const SignIn: React.FC = () => {
               color="primary"
               onClick={handleLogin}
               fullWidth
+              sx={{
+                fontSize: "3rem", // Set button text size
+                padding: ".5rem", // Adjust padding for better spacing
+              }}
             >
               Submit
             </Button>
