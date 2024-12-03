@@ -1,33 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { Box, TextField, Button, Typography, Grid } from '@mui/material';
-import image from '../../assets/images/AmusementPark.webp'
+// src/components/UserLogin.tsx
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { Box, TextField, Button, Typography, Grid } from "@mui/material";
+import image from "../../assets/images/AmusementPark.webp";
+import { getUserId } from "../../app/userAPI";
 
 const SignIn: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  // Check if user data already exists in localStorage
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedUserID = localStorage.getItem('userID');
+    const storedUsername = localStorage.getItem("username");
+    const storedUserId = localStorage.getItem("userid");
 
-    if (storedUsername && storedUserID) {
-      navigate('/home');
+    if (storedUsername && storedUserId) {
+      navigate("/dashboard");
     }
   }, [navigate]);
 
-  // Handle form submission
-  const handleSubmit = () => {
-    if (username.trim()) {
-      const userID = uuidv4();
-      localStorage.setItem('username', username);
-      localStorage.setItem('userID', userID);
-      navigate('/home');
-    } else {
-      alert('Please enter a valid username.');
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!username) {
+      return;
     }
+
+    const user = await getUserId(username);
+
+    // Save username and userId in localStorage
+    localStorage.setItem("username", user.username);
+    localStorage.setItem("userid", user.id);
+
+    // Redirect to the dashboard after successful login
+    navigate("/dashboard");
   };
 
   return (
@@ -36,10 +42,10 @@ const SignIn: React.FC = () => {
       <Grid item xs={12} md={6}>
         <Box
           sx={{
-            height: '100%',
-            backgroundImage:  `url(${require('../../assets/images/AmusementPark.webp')})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            height: "100%",
+            backgroundImage: `url(${require("../../assets/images/AmusementPark.webp")})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
       </Grid>
@@ -53,9 +59,9 @@ const SignIn: React.FC = () => {
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ padding: 4, bgcolor: '#f5f5f5' }}
+        sx={{ padding: 4, bgcolor: "#f5f5f5" }}
       >
-        <Typography variant='h2' align='center'>
+        <Typography align="center" sx={{ fontSize: "10rem" }}>
           Amusement Finder
         </Typography>
         <Box
@@ -63,12 +69,12 @@ const SignIn: React.FC = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          height='100%'
-          width='100%'
-          gap='10%'
+          height="100%"
+          width="100%"
+          gap="10%"
         >
-          <Box width="100%" maxWidth={400}>
-            <Typography variant="h4" gutterBottom align="center">
+          <Box width="25vw" height="20vh">
+            <Typography sx={{ fontSize: "6rem" }} gutterBottom align="center">
               Set Anonymous Username
             </Typography>
             <TextField
@@ -79,10 +85,11 @@ const SignIn: React.FC = () => {
               fullWidth
               sx={{ marginBottom: 2 }}
             />
+
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit}
+              onClick={handleLogin}
               fullWidth
             >
               Submit

@@ -27,3 +27,11 @@ export interface ReviewResponse {
   themeParkId: string;
   themeParkLocationId: string;
 }
+
+
+export interface UserDto {
+  id: string; 
+  username: string;
+  password: string;
+}
+
