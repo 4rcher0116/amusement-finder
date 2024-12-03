@@ -55,7 +55,7 @@ const ParkDetails: React.FC = () => {
       return;
     }
 
-    const userId = localStorage.getItem('userID');
+    const userId = localStorage.getItem('userid');
     if (!userId) {
       navigate('/');
       return;

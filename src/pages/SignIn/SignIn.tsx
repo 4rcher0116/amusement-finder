@@ -31,7 +31,7 @@ const SignIn: React.FC = () => {
     // Save username and userId in localStorage
     localStorage.setItem("username", user.userName);
     localStorage.setItem("userid", user.id);
-
+    
     // Redirect to the dashboard after successful login
     navigate("/home");
   };
