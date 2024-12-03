@@ -26,9 +26,11 @@ import {
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppDispatch } from '../../app/store';
+import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const parks = useSelector(selectParks);
   const status = useSelector(selectHomePageStatus);
   const [selectedPark, setSelectedPark] = useState<Park | null>(null);
@@ -42,6 +44,7 @@ const Home: React.FC = () => {
 
   const handleSelectPark = (park: Park) => {
     setSelectedPark(park);
+    navigate(`/park/${park.parkLocationId}`);
   };
 
   const getFilteredAndSortedParks = () => {
