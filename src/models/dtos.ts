@@ -31,7 +31,7 @@ export interface ReviewResponse {
 
 export interface UserDto {
   id: string; 
-  username: string;
+  userName: string;
   password: string;
 }
 

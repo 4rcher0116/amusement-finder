@@ -15,7 +15,7 @@ const SignIn: React.FC = () => {
     const storedUserId = localStorage.getItem("userid");
 
     if (storedUsername && storedUserId) {
-      navigate("/dashboard");
+      navigate("/home");
     }
   }, [navigate]);
 
@@ -29,11 +29,11 @@ const SignIn: React.FC = () => {
     const user = await getUserId(username);
 
     // Save username and userId in localStorage
-    localStorage.setItem("username", user.username);
+    localStorage.setItem("username", user.userName);
     localStorage.setItem("userid", user.id);
 
     // Redirect to the dashboard after successful login
-    navigate("/dashboard");
+    navigate("/home");
   };
 
   return (
@@ -61,7 +61,7 @@ const SignIn: React.FC = () => {
         justifyContent="center"
         sx={{ padding: 4, bgcolor: "#f5f5f5" }}
       >
-        <Typography align="center" sx={{ fontSize: "10rem" }}>
+        <Typography align="center" variant="h1">
           Amusement Finder
         </Typography>
         <Box
@@ -74,7 +74,7 @@ const SignIn: React.FC = () => {
           gap="10%"
         >
           <Box width="fit-content" height="20vh">
-            <Typography sx={{ fontSize: "6rem" }} gutterBottom align="center">
+            <Typography variant="h2" gutterBottom align="center">
               Set Anonymous Username
             </Typography>
             <TextField
@@ -83,19 +83,6 @@ const SignIn: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               fullWidth
-              sx={{
-                marginBottom: "1rem", // Adjust spacing between fields
-                "& .MuiInputLabel-root": {
-                  fontSize: "2rem", // Set label font size
-                },
-                "& .MuiInputBase-input": {
-                  fontSize: "5rem", // Set input font size
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  fontSize: "5rem", // Set placeholder text size
-                },
-              }}
-              hiddenLabel
             />
 
             <Button
@@ -103,10 +90,6 @@ const SignIn: React.FC = () => {
               color="primary"
               onClick={handleLogin}
               fullWidth
-              sx={{
-                fontSize: "3rem", // Set button text size
-                padding: ".5rem", // Adjust padding for better spacing
-              }}
             >
               Submit
             </Button>
