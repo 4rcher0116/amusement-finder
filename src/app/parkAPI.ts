@@ -27,8 +27,8 @@ export const getParksByLocation = async (locationId: string) => {
 };
 
 // Add a review
-export const addReview = async (locationId: string, reviewData: ReviewRequest) => {
-  const response = await apiClient.post(`/parks/location/${locationId}`, reviewData);
+export const addReview = async (reviewData: ReviewRequest) => {
+  const response = await apiClient.post('/review', reviewData);
   return response.data;
 };
 
