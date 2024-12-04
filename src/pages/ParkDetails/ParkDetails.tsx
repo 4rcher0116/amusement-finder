@@ -5,7 +5,9 @@ import { AppDispatch } from '../../app/store';
 import { 
   fetchReviewsByLocation,
   selectParks,
-  selectReviews 
+  selectReviews,
+  selectReviewsStatus,
+  selectReviewsError
 } from '../../app/slices/homePageSlice';
 import { 
   Box, 
@@ -36,11 +38,20 @@ const ParkDetails: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const reviewsStatus = useSelector(selectReviewsStatus);
+  const reviewsError = useSelector(selectReviewsError);
+
   useEffect(() => {
     if (parkLocationId) {
+      console.log('Fetching reviews for parkLocationId:', parkLocationId);
       dispatch(fetchReviewsByLocation(parkLocationId));
     }
   }, [dispatch, parkLocationId]);
+
+  useEffect(() => {
+    console.log('Reviews status:', reviewsStatus);
+    console.log('Current reviews:', reviews);
+  }, [reviews, reviewsStatus]);
 
   const handleSubmitReview = async () => {
     if (!reviewText.trim()) {
@@ -78,12 +89,16 @@ const ParkDetails: React.FC = () => {
         themeParkLocationId: parkLocationId
       };
 
+      console.log('Submitting review:', reviewData);
       await addReview(reviewData);
+      console.log('Review submitted successfully');
+      
       setSubmitStatus('success');
       setReviewText('');
       setRating(5);
       dispatch(fetchReviewsByLocation(parkLocationId));
     } catch (error) {
+      console.error('Review submission failed:', error);
       setSubmitStatus('error');
       setErrorMessage('Failed to submit review. Please try again.');
     }
@@ -148,17 +163,32 @@ const ParkDetails: React.FC = () => {
           Reviews
         </Typography>
         <Stack spacing={2}>
-          {reviews.map(review => (
-            <Paper key={review.id} elevation={1} sx={{ p: 2 }}>
-              <Rating value={review.ratingScore} readOnly size="small" sx={{ mb: 1 }} />
-              <Typography variant="body1">{review.review}</Typography>
-            </Paper>
-          ))}
-          {reviews.length === 0 && (
+          {reviewsStatus === 'loading' && (
+            <Box display="flex" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          )}
+          
+          {reviewsStatus === 'failed' && (
+            <Alert severity="error">
+              Failed to load reviews: {reviewsError}
+            </Alert>
+          )}
+          
+          {reviewsStatus === 'succeeded' && reviews.length === 0 && (
             <Typography color="text.secondary">
               No reviews yet. Be the first to review!
             </Typography>
           )}
+          
+          {reviewsStatus === 'succeeded' && reviews.map(review => (
+            <Paper key={review.id} elevation={1} sx={{ p: 2 }}>
+              <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+                <Rating value={review.rating} readOnly size="small" />
+              </Stack>
+              <Typography variant="body1">{review.comment}</Typography>
+            </Paper>
+          ))}
         </Stack>
       </Box>
     </Container>

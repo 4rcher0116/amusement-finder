@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { getParks, getLocations, getReviewsByLocation } from '../parkAPI';
-import { Park, Location, ReviewResponse } from '../../models/dtos';
+import { Park, Location, Review } from '../../models/dtos';
 
 // Define the initial state
 interface HomePageState {
   parks: Park[];
   locations: Location[];
-  reviews: ReviewResponse[];
+  reviews: Review[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
@@ -35,7 +35,8 @@ export const fetchLocations = createAsyncThunk(
 export const fetchReviewsByLocation = createAsyncThunk(
   'homePage/fetchReviewsByLocation',
   async (parkLocationId: string) => {
-    return await getReviewsByLocation(parkLocationId);
+    const response = await getReviewsByLocation(parkLocationId);
+    return response;
   }
 );
 
@@ -77,7 +78,7 @@ const homePageSlice = createSlice({
       })
       .addCase(fetchReviewsByLocation.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch reviews';
+        state.error = action.error.message || null;
       });
   },
 });
@@ -90,3 +91,5 @@ export const selectLocations = (state: RootState) => state.homePage.locations;
 export const selectReviews = (state: RootState) => state.homePage.reviews;
 export const selectHomePageStatus = (state: RootState) =>
   state.homePage.status;
+export const selectReviewsStatus = (state: RootState) => state.homePage.status;
+export const selectReviewsError = (state: RootState) => state.homePage.error;

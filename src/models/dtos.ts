@@ -35,3 +35,11 @@ export interface UserDto {
   password: string;
 }
 
+export interface Review {
+  id: string;
+  comment: string;
+  rating: number;
+  userId: string;
+  themeParkId?: string;
+  themeParkLocationId: string;
+}
