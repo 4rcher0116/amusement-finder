@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Box, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemText, Fab, Divider, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -7,6 +7,7 @@ import Home from './pages/Home/Home';
 import SignIn from './pages/SignIn/SignIn';
 import ParkDetails from './pages/ParkDetails/ParkDetails';
 import MyReviews from './components/MyReviews/MyReviews';
+import ParkSearch from './components/ParkSearch/ParkSearch'; // Import the ParkSearch component
 
 // Define drawer width
 const drawerWidth = 240;
@@ -74,8 +75,8 @@ function App() {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton component="a" href="/">
-                  <ListItemText primary="Sign In" />
+                <ListItemButton component="a" href="/park-search">
+                  <ListItemText primary="Park Search" />
                 </ListItemButton>
               </ListItem>
             </List>
@@ -103,7 +104,8 @@ function App() {
             <Route path="/" element={<SignIn />} />
             <Route path="/home" element={<Home />} />
             <Route path="/park/:parkLocationId" element={<ParkDetails />} />
-            <Route path="/my-reviews" element={<MyReviews />} /> {/* Add the My Reviews route */}
+            <Route path="/my-reviews" element={<MyReviews />} />
+            <Route path="/park-search" element={<ParkSearch />} /> {/* Add the Park Search route */}
           </Routes>
         </Box>
       </Box>
