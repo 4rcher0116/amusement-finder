@@ -15,8 +15,18 @@ import {
   Stack,
   Rating,
 } from "@mui/material";
-import { Review, ReviewRequest } from "../../models/dtos";
-import { getReviewsByUser, updateReview } from "../../app/parkAPI";
+import { getReviewsByUser, updateReview, deleteReview } from "../../app/parkAPI";
+import { ReviewRequest } from "../../models/dtos";
+
+interface Review {
+  reviewId: string;
+  userId: string;
+  comment: string;
+  rating: number;
+  themeParkId: string;
+  themeParkLocationId: string;
+  themeParkName: string;
+}
 
 const MyReviews: React.FC = () => {
   const userId = localStorage.getItem("userid");
@@ -51,11 +61,11 @@ const MyReviews: React.FC = () => {
   const handleEditSave = async () => {
     if (editReview && editRating !== null) {
       const updatedReview: ReviewRequest = {
-        id: editReview.id,
+        id: editReview.reviewId,
         review: editComment,
         userId: editReview.userId,
         ratingScore: editRating,
-        themeParkId: editReview.themeParkId || "",
+        themeParkId: editReview.themeParkId,
         themeParkLocationId: editReview.themeParkLocationId,
       };
 
@@ -63,7 +73,7 @@ const MyReviews: React.FC = () => {
         await updateReview(updatedReview);
         setReviews((prevReviews) =>
           prevReviews.map((review) =>
-            review.id === editReview.id
+            review.reviewId === editReview.reviewId
               ? { ...review, comment: editComment, rating: editRating }
               : review
           )
@@ -72,6 +82,15 @@ const MyReviews: React.FC = () => {
       } catch (error) {
         console.error("Failed to update review:", error);
       }
+    }
+  };
+
+  const handleDelete = async (reviewId: string) => {
+    try {
+      await deleteReview(reviewId);
+      setReviews((prevReviews) => prevReviews.filter((review) => review.reviewId !== reviewId));
+    } catch (error) {
+      console.error("Failed to delete review:", error);
     }
   };
 
@@ -99,27 +118,45 @@ const MyReviews: React.FC = () => {
           variant="h4"
           gutterBottom
           align="center"
-          sx={{ mb: 4, fontWeight: 600, color: 'primary.main' }}
+          sx={{ mb: 4, fontWeight: 600, color: "primary.main" }}
         >
           My Reviews
         </Typography>
         <Grid container spacing={3}>
           {reviews.map((review) => (
-            <Grid item xs={12} key={review.id}>
+            <Grid item xs={12} key={review.reviewId}>
               <Paper elevation={2} sx={{ p: 3 }}>
-                <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-                  <Rating value={review.rating} readOnly size="small" />
+                <Typography variant="h5" fontWeight={400} gutterBottom>
+                  {review.themeParkName}
+                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  sx={{ mb: 1 }}
+                >
+                  <Rating value={review.rating} readOnly size="medium" />
                 </Stack>
-                <Typography variant="body1" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   {review.comment}
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleEditClick(review)}
-                >
-                  Edit
-                </Button>
+                <Stack direction="row" spacing={1} paddingTop={1}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => handleEditClick(review)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: "red", fontWeight: "bold" }}
+                    onClick={() => handleDelete(review.reviewId)}
+                  >
+                    Delete
+                  </Button>
+                </Stack>
               </Paper>
             </Grid>
           ))}
