@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Box, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemText, Fab, Divider, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import Home from './pages/Home/Home';
 import SignIn from './pages/SignIn/SignIn';
 import ParkDetails from './pages/ParkDetails/ParkDetails';
+import MyReviews from './components/MyReviews/MyReviews';
 
 // Define drawer width
 const drawerWidth = 240;
@@ -24,11 +25,13 @@ function App() {
     window.location.reload(); 
   };
 
+  const currentPath = window.location.pathname;
+
   return (
     <Router>
       <Box sx={{ position: 'relative', height: '100vh' }}>
         {/* Floating Action Button */}
-        <Fab
+        {(currentPath !== '/') && <Fab
           color="primary"
           aria-label="menu"
           onClick={toggleDrawer}
@@ -40,7 +43,7 @@ function App() {
           }}
         >
           {isDrawerOpen ? <CloseIcon /> : <MenuIcon />}
-        </Fab>
+        </Fab>}
 
         {/* Drawer */}
         <Drawer
@@ -66,8 +69,8 @@ function App() {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton component="a" href="/park/1">
-                  <ListItemText primary="Park Details" />
+                <ListItemButton component="a" href="/my-reviews">
+                  <ListItemText primary="My Reviews" />
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
@@ -91,16 +94,16 @@ function App() {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 3,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
         >
           <Routes>
             <Route path="/" element={<SignIn />} />
             <Route path="/home" element={<Home />} />
             <Route path="/park/:parkLocationId" element={<ParkDetails />} />
+            <Route path="/my-reviews" element={<MyReviews />} /> {/* Add the My Reviews route */}
           </Routes>
         </Box>
       </Box>
