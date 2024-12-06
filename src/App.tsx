@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Box, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemText, Fab, Divider, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -14,6 +14,7 @@ const drawerWidth = 240;
 
 function App() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [showFab, setShowFab] = useState<boolean>(window.location.pathname !== '/');
 
   const toggleDrawer = () => {
     setDrawerOpen((prev) => !prev);
@@ -26,13 +27,15 @@ function App() {
     window.location.reload(); 
   };
 
-  const currentPath = window.location.pathname;
+  useEffect(() => {
+    setShowFab(window.location.pathname !== '/');
+  }, [window.location.pathname]);
 
   return (
     <Router>
       <Box sx={{ position: 'relative', height: '100vh' }}>
         {/* Floating Action Button */}
-        {(currentPath !== '/') && <Fab
+        {showFab && <Fab
           color="primary"
           aria-label="menu"
           onClick={toggleDrawer}
